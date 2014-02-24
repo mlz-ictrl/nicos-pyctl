@@ -8,5 +8,6 @@ setup(name='nicos-pyctl',
       author='Georg Brandl',
       author_email='georg.brandl@frm2.tum.de',
       url='http://tacodb.frm2.tum.de/pub/python/',
+      packages=['nicospyctl'],
       ext_modules=[Extension('nicospyctl.pyctl', ['pyctl.c'])],
      )
