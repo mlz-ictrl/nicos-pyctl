@@ -434,7 +434,7 @@ static PyTypeObject CtlrType = {
     PyObject_HEAD_INIT(NULL)
     0,					/* ob_size		*/
 #endif
-    "pyctl.Controller",		/* tp_name		*/
+    "nicospyctl.pyctl.Controller",	/* tp_name		*/
     sizeof(CtlrObject),			/* tp_basicsize		*/
     0,					/* tp_itemsize		*/
     (destructor)ctlr_dealloc,		/* tp_dealloc		*/
@@ -482,7 +482,7 @@ static PyMethodDef functions[] = {
 #if PY_MAJOR_VERSION >= 3
 static struct PyModuleDef moduledef = {
     PyModuleDef_HEAD_INIT,
-    "pyctl",
+    "nicospyctl.pyctl",
     0,    /* m_doc */
     -1,   /* m_size */
     functions, /* m_methods */
@@ -508,7 +508,7 @@ PyInit_pyctl(void)
     Py_INCREF((PyObject *)&CtlrType);
     PyModule_AddObject(module, "Controller", (PyObject *)&CtlrType);
 
-    ControlStop = PyErr_NewException("pyctl.ControlStop",
+    ControlStop = PyErr_NewException("nicospyctl.pyctl.ControlStop",
                                      PyExc_BaseException, NULL);
     if (ControlStop == NULL) {
         Py_DECREF(module);
@@ -517,7 +517,7 @@ PyInit_pyctl(void)
     Py_INCREF(ControlStop);
     PyModule_AddObject(module, "ControlStop", ControlStop);
 
-    ControllerError = PyErr_NewException("pyctl.ControllerError", NULL, NULL);
+    ControllerError = PyErr_NewException("nicospyctl.pyctl.ControllerError", NULL, NULL);
     if (ControllerError == NULL) {
         Py_DECREF(module);
         return NULL;
@@ -531,17 +531,17 @@ void
 initpyctl(void)
 {
     PyObject *module;
-    module = Py_InitModule("pyctl", functions);
+    module = Py_InitModule("nicospyctl.pyctl", functions);
     CtlrType.ob_type = &PyType_Type;
     Py_INCREF((PyObject *)&CtlrType);
     PyModule_AddObject(module, "Controller", (PyObject *)&CtlrType);
-    ControlStop = PyErr_NewException("pyctl.ControlStop",
+    ControlStop = PyErr_NewException("nicospyctl.pyctl.ControlStop",
                                      PyExc_BaseException, NULL);
     if (ControlStop != NULL) {
         Py_INCREF(ControlStop);
         PyModule_AddObject(module, "ControlStop", ControlStop);
     }
-    ControllerError = PyErr_NewException("pyctl.ControllerError", NULL, NULL);
+    ControllerError = PyErr_NewException("nicospyctl.pyctl.ControllerError", NULL, NULL);
     if (ControllerError != NULL) {
         Py_INCREF(ControllerError);
         PyModule_AddObject(module, "ControllerError", ControllerError);
