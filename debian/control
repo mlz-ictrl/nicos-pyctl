@@ -1,0 +1,15 @@
+Source: nicos-pyctl
+Section: misc
+Priority: extra
+Maintainer: Alexander Lenz <alexander.lenz@frm2.tum.de>
+Build-Depends: debhelper (>= 9.0.0),
+ python (>= 2.7),
+ python-setuptools,
+ python-dev
+Standards-Version: 3.9.3
+
+Package: nicos-pyctl
+Architecture: any
+Depends: python (>= 2.7),
+ python-setuptools
+Description: NICOS pyctl c module
