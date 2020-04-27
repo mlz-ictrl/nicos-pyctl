@@ -1,9 +1,9 @@
-Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: nicos-pyctl
-Source: http://forge.frm2.tum.de/cgit/cgit.cgi/frm2/nicos/nicos-pyctl.git/
+Source: https://forge.frm2.tum.de/cgit/cgit.cgi/frm2/nicos/nicos-pyctl.git/
 
 Files: *
-Copyright: 2009-2015 Georg Brandl <g.brandl@fz-juelich.de>
+Copyright: 2009-2020 Georg Brandl <g.brandl@fz-juelich.de>
 License: GPL-2
 
 Files: debian/*

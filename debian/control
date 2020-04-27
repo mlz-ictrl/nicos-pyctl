@@ -1,15 +1,39 @@
 Source: nicos-pyctl
 Section: misc
-Priority: extra
-Maintainer: Alexander Lenz <alexander.lenz@frm2.tum.de>
-Build-Depends: debhelper (>= 9.0.0),
+Priority: optional
+Maintainer: Georg Brandl <g.brandl@fz-juelich.de>
+Build-Depends: debhelper (>= 11~),
+ dh-python,
  python (>= 2.7),
+ python3 (>= 3.6),
  python-setuptools,
- python-dev
+ python3-setuptools,
+ python-dev,
+ python3-dev
 Standards-Version: 3.9.3
 
 Package: nicos-pyctl
+Architecture: all
+Section: oldlibs
+Depends: python-nicos-pyctl,
+ ${misc:Depends}
+Description: Transitional dummy package
+ Installs "python-nicos-pyctl" as dependency.
+
+Package: python-nicos-pyctl
 Architecture: any
-Depends: python (>= 2.7),
- python-setuptools
-Description: NICOS pyctl c module
+Depends: ${shlibs:Depends},
+ ${misc:Depends},
+ ${python:Depends}
+Description: NICOS pyctl c module (Python 2)
+ A small Python module to control the execution of a script using the
+ Python debugger interface.
+
+Package: python3-nicos-pyctl
+Architecture: any
+Depends: ${shlibs:Depends},
+ ${misc:Depends},
+ ${python3:Depends}
+Description: NICOS pyctl c module (Python 3)
+ A small Python module to control the execution of a script using the
+ Python debugger interface.

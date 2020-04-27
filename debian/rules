@@ -9,10 +9,7 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-DEBPYTHON_DEFAULT=2.7
-DEBPYTHON_SUPPORTED=2.7
-
-export DEBPYTHON_DEFAULT DEBPYTHON_SUPPORTED
+export PYBUILD_NAME = nicos-pyctl
 
 %:
-	dh $@ --with python2 --buildsystem=python_distutils
+	dh $@ --with python2,python3 --buildsystem=pybuild
