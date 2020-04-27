@@ -1,3 +1,9 @@
+nicos-pyctl (1.0.1) unstable; urgency=medium
+
+  * switch to pybuild, build Python 2/3, proper package naming
+
+ -- Georg Brandl <jenkins@jenkinsng.admin.frm2.tum.de>  Mon, 27 Apr 2020 11:45:56 +0200
+
 nicos-pyctl (1.0.0) unstable; urgency=low
 
   * UNRELEASED
