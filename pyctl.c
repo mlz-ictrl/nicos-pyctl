@@ -81,7 +81,7 @@ static PyObject *ControllerError = NULL;
 
 
 /* set a new status and notify the observer */
-__inline void
+static __inline void
 set_status(CtlrObject *self, int status)
 {
     if (self->status == status)
@@ -97,7 +97,7 @@ set_status(CtlrObject *self, int status)
 }
 
 /* set a new line number and notify the observer */
-__inline void
+static __inline void
 set_lineno(CtlrObject *self, int lineno)
 {
     if (self->lineno == lineno)
