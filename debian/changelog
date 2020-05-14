@@ -1,3 +1,9 @@
+nicos-pyctl (1.1.0) unstable; urgency=medium
+
+  * fix for unresolved symbols: __inline should be static
+
+ -- Georg Brandl <jenkins@jenkinsng.admin.frm2.tum.de>  Thu, 14 May 2020 07:02:13 +0200
+
 nicos-pyctl (1.0.1) unstable; urgency=medium
 
   * switch to pybuild, build Python 2/3, proper package naming
