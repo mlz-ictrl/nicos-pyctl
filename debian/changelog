@@ -1,3 +1,9 @@
+nicos-pyctl (1.2.0) focal; urgency=medium
+
+  * debian: remove Python 2 build
+
+ -- Georg Brandl <jenkins@jenkins02.admin.frm2.tum.de>  Wed, 10 Nov 2021 17:46:56 +0100
+
 nicos-pyctl (1.1.0) unstable; urgency=medium
 
   * fix for unresolved symbols: __inline should be static
