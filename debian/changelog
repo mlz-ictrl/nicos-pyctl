@@ -20,7 +20,7 @@ nicos-pyctl (1.0.0) unstable; urgency=low
 
   * UNRELEASED
 
- -- Jenkins <jenkins@debuild.taco.frm2>  Fri, 23 Oct 2015 12:29:51 +0200
+ -- Jenkins <jenkins@debuild.taco.frm2.tum.de>  Fri, 23 Oct 2015 12:29:51 +0200
 
 nicos-pyctl (0.0.0) unstable; urgency=low
 
