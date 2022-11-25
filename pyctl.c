@@ -26,16 +26,11 @@
 #include <structmember.h>
 #include <pythread.h>
 
-#if PY_MAJOR_VERSION >= 3
-#define STRING_AS_STRING PyUnicode_AsUTF8
-#define STRING_CHECK PyUnicode_Check
-#define CODE_CAST PyObject
-#else
-#define STRING_AS_STRING PyString_AsString
-#define STRING_CHECK PyString_Check
-#define CODE_CAST PyCodeObject
+#if PY_VERSION_HEX < 0x03090000
+#define PyFrame_GetCode(f) (f)->f_code
+#define PyFrame_GetLineNumber(f) (f)->f_lineno
+#define Py_SET_TYPE(t, b) Py_TYPE((t)) = (b)
 #endif
-
 
 typedef struct {
     PyObject_HEAD
@@ -138,14 +133,14 @@ trace_function(CtlrObject *self, PyFrameObject *frame, int what, PyObject *arg)
 
     if (what == PyTrace_LINE) {
         if (self->lineno_behavior == LINENO_NAME &&
-            strcmp(STRING_AS_STRING(frame->f_code->co_filename),
-                   STRING_AS_STRING(self->break_only_in_filename)) == 0)
-            set_lineno(self, frame->f_lineno);
+            strcmp(PyUnicode_AsUTF8(PyFrame_GetCode(frame)->co_filename),
+                   PyUnicode_AsUTF8(self->break_only_in_filename)) == 0)
+            set_lineno(self, PyFrame_GetLineNumber(frame));
         else if (self->lineno_behavior == LINENO_TOPLEVEL &&
                  frame == self->toplevelframe)
-            set_lineno(self, frame->f_lineno);
+            set_lineno(self, PyFrame_GetLineNumber(frame));
         else if (self->lineno_behavior == LINENO_ALL)
-            set_lineno(self, frame->f_lineno);
+            set_lineno(self, PyFrame_GetLineNumber(frame));
     }
 
     switch (self->request) {
@@ -153,14 +148,14 @@ trace_function(CtlrObject *self, PyFrameObject *frame, int what, PyObject *arg)
         return 0;
     case REQ_BREAK:
         /* always break if frame filename starts with <break> */
-        if (strncmp(STRING_AS_STRING(frame->f_code->co_filename), "<break>", 7) != 0) {
+        if (strncmp(PyUnicode_AsUTF8(PyFrame_GetCode(frame)->co_filename), "<break>", 7) != 0) {
             if (self->break_only_in_toplevel && frame != self->toplevelframe) {
                 /* keep the break request, but wait until in toplevel */
                 return 0;
             }
             if (self->break_only_in_filename &&
-                strcmp(STRING_AS_STRING(frame->f_code->co_filename),
-                       STRING_AS_STRING(self->break_only_in_filename)) != 0) {
+                strcmp(PyUnicode_AsUTF8(PyFrame_GetCode(frame)->co_filename),
+                       PyUnicode_AsUTF8(self->break_only_in_filename)) != 0) {
                 /* keep the break request, but wait until in frame with
                    the specified filename */
                 return 0;
@@ -255,7 +250,7 @@ ctlr_init(CtlrObject *self, PyObject *args, PyObject *kwds)
         return -1;
     if (break_only_in_filename == Py_None)
         break_only_in_filename = NULL;
-    if (break_only_in_filename && !STRING_CHECK(break_only_in_filename)) {
+    if (break_only_in_filename && !PyUnicode_Check(break_only_in_filename)) {
         PyErr_SetString(PyExc_TypeError, "break_only_in_filename arg must be "
                         "a string");
         return -1;
@@ -341,7 +336,7 @@ ctlr_start_exec(CtlrObject *self, PyObject *args)
         Py_INCREF(self->requestarg);
     }
     PyEval_SetTrace((Py_tracefunc)trace_function, (PyObject *)self);
-    ret = PyEval_EvalCode((CODE_CAST *)code, globals, locals);
+    ret = PyEval_EvalCode((PyObject *)code, globals, locals);
     reset(self, ret == NULL);
     return ret;
 }
@@ -497,7 +492,7 @@ PyInit_pyctl(void)
 {
     PyObject *module;
 
-    Py_TYPE(&CtlrType) = &PyType_Type;
+    Py_SET_TYPE(&CtlrType, &PyType_Type);
     if (PyType_Ready(&CtlrType) < 0)
         return NULL;
 
