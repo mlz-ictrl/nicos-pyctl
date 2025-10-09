@@ -180,7 +180,7 @@ trace_function(CtlrObject *self, PyFrameObject *frame, int what, PyObject *arg)
     case REQ_DEBUG:
         if (self->status == STATUS_RUNNING && PyCallable_Check(self->requestarg)) {
             /* the requestarg should be the set_trace() function of a Pdb instance */
-            ret = PyObject_CallFunctionObjArgs(self->requestarg, self->currentframe,
+            ret = PyObject_CallFunctionObjArgs(self->requestarg, frame,
                                                self->toplevelframe, NULL);
             /* NOTE: if the debugger set_trace succeeded, our trace function will be
                inactive until someone calls reset_trace() */
@@ -423,12 +423,7 @@ static PyMemberDef ctlr_members[] = {
 };
 
 static PyTypeObject CtlrType = {
-#if PY_MAJOR_VERSION >= 3
     PyVarObject_HEAD_INIT(NULL, 0)
-#else
-    PyObject_HEAD_INIT(NULL)
-    0,					/* ob_size		*/
-#endif
     "nicospyctl.pyctl.Controller",	/* tp_name		*/
     sizeof(CtlrObject),			/* tp_basicsize		*/
     0,					/* tp_itemsize		*/
@@ -474,7 +469,6 @@ static PyMethodDef functions[] = {
     {NULL}
 };
 
-#if PY_MAJOR_VERSION >= 3
 static struct PyModuleDef moduledef = {
     PyModuleDef_HEAD_INIT,
     "nicospyctl.pyctl",
@@ -521,25 +515,3 @@ PyInit_pyctl(void)
     PyModule_AddObject(module, "ControllerError", ControllerError);
     return module;
 }
-#else
-void
-initpyctl(void)
-{
-    PyObject *module;
-    module = Py_InitModule("nicospyctl.pyctl", functions);
-    CtlrType.ob_type = &PyType_Type;
-    Py_INCREF((PyObject *)&CtlrType);
-    PyModule_AddObject(module, "Controller", (PyObject *)&CtlrType);
-    ControlStop = PyErr_NewException("nicospyctl.pyctl.ControlStop",
-                                     PyExc_BaseException, NULL);
-    if (ControlStop != NULL) {
-        Py_INCREF(ControlStop);
-        PyModule_AddObject(module, "ControlStop", ControlStop);
-    }
-    ControllerError = PyErr_NewException("nicospyctl.pyctl.ControllerError", NULL, NULL);
-    if (ControllerError != NULL) {
-        Py_INCREF(ControllerError);
-        PyModule_AddObject(module, "ControllerError", ControllerError);
-    }
-}
-#endif
