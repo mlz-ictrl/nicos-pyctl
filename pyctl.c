@@ -121,14 +121,13 @@ trace_function(CtlrObject *self, PyFrameObject *frame, int what, PyObject *arg)
     /* the first frame we're called in is the "toplevel" frame
        of the traced code */
     if (self->toplevelframe == NULL) {
+        Py_INCREF(frame);
         self->toplevelframe = frame;
-        Py_INCREF(self->toplevelframe);
     }
 
     if (frame != self->currentframe) {
-        Py_XDECREF(self->currentframe);
-        self->currentframe = frame;
-        Py_INCREF(self->currentframe);
+        Py_INCREF(frame);
+        Py_XSETREF(self->currentframe, frame);
     }
 
     if (what == PyTrace_LINE) {
@@ -332,8 +331,8 @@ ctlr_start_exec(CtlrObject *self, PyObject *args)
     prepare(self);
     if (debugarg && debugarg != Py_None) {
         self->request = REQ_DEBUG;
-        self->requestarg = debugarg;
-        Py_INCREF(self->requestarg);
+        Py_INCREF(debugarg);
+        Py_XSETREF(self->requestarg, debugarg);
     }
     PyEval_SetTrace((Py_tracefunc)trace_function, (PyObject *)self);
     ret = PyEval_EvalCode((PyObject *)code, globals, locals);
@@ -348,9 +347,8 @@ ctlr_set_break(CtlrObject *self, PyObject *arg)
         PyErr_SetString(ControllerError, "Controller not started");
         return NULL;
     }
-    Py_CLEAR(self->requestarg);
-    self->requestarg = arg;
-    Py_INCREF(self->requestarg);
+    Py_INCREF(arg);
+    Py_XSETREF(self->requestarg, arg);
     self->request = REQ_BREAK;
     Py_RETURN_NONE;
 }
@@ -362,9 +360,8 @@ ctlr_set_stop(CtlrObject *self, PyObject *arg)
         PyErr_SetString(ControllerError, "Controller not started");
         return NULL;
     }
-    Py_CLEAR(self->requestarg);
-    self->requestarg = arg;
-    Py_INCREF(self->requestarg);
+    Py_INCREF(arg);
+    Py_XSETREF(self->requestarg, arg);
     self->request = REQ_STOP;
     Py_RETURN_NONE;
 }
@@ -376,9 +373,8 @@ ctlr_set_debug(CtlrObject *self, PyObject *arg)
         PyErr_SetString(ControllerError, "Controller not started");
         return NULL;
     }
-    Py_CLEAR(self->requestarg);
-    self->requestarg = arg;
-    Py_INCREF(self->requestarg);
+    Py_INCREF(arg);
+    Py_XSETREF(self->requestarg, arg);
     self->request = REQ_DEBUG;
     Py_RETURN_NONE;
 }
@@ -397,9 +393,8 @@ ctlr_set_observer(CtlrObject *self, PyObject *arg)
         PyErr_SetString(ControllerError, "argument is not a callable");
         return NULL;
     }
-    Py_CLEAR(self->observer);
-    self->observer = arg;
-    Py_INCREF(self->observer);
+    Py_INCREF(arg);
+    Py_XSETREF(self->observer, arg);
     Py_RETURN_NONE;
 }
 
