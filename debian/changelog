@@ -1,4 +1,4 @@
-nicos-pyctl (1.2.0) focal; urgency=medium
+nicos-pyctl (1.2.0) unstable; urgency=medium
 
   * debian: remove Python 2 build
 
