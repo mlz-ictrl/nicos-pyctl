@@ -3,7 +3,7 @@
 from setuptools import setup, Extension
 
 setup(name='nicos-pyctl',
-      version='1.3',
+      version='1.4',
       description='NICOS pyctl c module',
       author='Georg Brandl',
       author_email='georg.brandl@frm2.tum.de',
